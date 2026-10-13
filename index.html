@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DevPathways · Interactive Developer Roadmaps & Free Curated Resources</title>
+  <meta name="description" content="Interactive developer learning roadmaps with checkboxes, local storage progress tracking, and curated free resources for Spring Boot, MERN, Laravel, DevOps, Cloud, Cybersecurity, Frontend, and AI.">
+  <style>
+    /* ==========================================================================
+       CSS RESET & DESIGN SYSTEM (Blackish Obsidian & Mix Accent Theme)
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-base: #08090d;
+      --bg-surface: #0f1118;
+      --bg-surface-elevated: #161823;
+      --bg-surface-hover: #1d202e;
+      --bg-card: #12141d;
+      --bg-card-inner: #0b0c12;
+      
+      --border-subtle: rgba(255, 255, 255, 0.07);
+      --border-medium: rgba(255, 255, 255, 0.14);
+      --border-bright: rgba(255, 255, 255, 0.25);
+      
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --text-dim: #64748b;
+      
+      /* Vibrant Mix Color Accents (Never plain navy!) */
+      --accent-gold: #f59e0b;
+      --accent-gold-glow: rgba(245, 158, 11, 0.25);
+      --accent-emerald: #10b981;
+      --accent-emerald-glow: rgba(16, 185, 129, 0.25);
+      --accent-violet: #8b5cf6;
+      --accent-violet-glow: rgba(139, 92, 246, 0.25);
+      --accent-cyan: #06b6d4;
+      --accent-rose: #f43f5e;
+      --accent-orange: #f97316;
+      
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --radius-full: 9999px;
+      
+      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --transition-fast: 0.15s ease;
+      --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: var(--font-family);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 15% 10%, rgba(139, 92, 246, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 85% 25%, rgba(16, 185, 129, 0.04) 0%, transparent 45%),
+        radial-gradient(circle at 50% 80%, rgba(245, 158, 11, 0.03) 0%, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    /* Container */
+    .container {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+
+    /* ==========================================================================
+       TOP NAVIGATION & HEADER (Clean: Logo & Status Badge)
+       ========================================================================== */
+    .header {
+      background: rgba(11, 12, 18, 0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border-subtle);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 66px;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+      color: var(--text-main);
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, #f59e0b, #10b981);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #000;
+      box-shadow: 0 0 16px var(--accent-gold-glow);
+    }
+
+    .brand-text span {
+      color: var(--accent-gold);
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.85rem;
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: var(--radius-full);
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--accent-emerald);
+      white-space: nowrap;
+    }
+    .header-badge::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-emerald);
+      box-shadow: 0 0 6px var(--accent-emerald);
+    }
+
+    /* ==========================================================================
+       MAIN HERO & ROADMAP TABS SELECTOR
+       ========================================================================== */
+    .hero {
+      padding: 2.25rem 0 1.25rem;
+      text-align: left;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.25rem 0.75rem;
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.28);
+      border-radius: var(--radius-full);
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--accent-gold);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.75rem;
+    }
+
+    .hero-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.35rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 0.45rem;
+    }
+    .hero-title .gradient-text {
+      background: linear-gradient(135deg, #ffffff 30%, #f59e0b 80%, #10b981 100%);
+      
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      color: var(--text-muted);
+      font-size: 0.94rem;
+      max-width: 740px;
+      line-height: 1.6;
+    }
+
+    /* Category Filter Chips */
+    .category-filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1.35rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+      scrollbar-width: thin;
+    }
+
+    .cat-chip {
+      padding: 0.35rem 0.8rem;
+      border-radius: var(--radius-full);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      white-space: nowrap;
+      transition: all var(--transition-fast);
+    }
+    .cat-chip:hover {
+      border-color: var(--border-medium);
+      color: var(--text-main);
+    }
+    .cat-chip.active {
+      background: var(--accent-gold);
+      color: #000;
+      border-color: var(--accent-gold);
+      font-weight: 700;
+      box-shadow: 0 0 12px var(--accent-gold-glow);
+    }
+
+    /* Roadmap Switcher Pills */
+    .roadmaps-nav-scroll {
+      margin: 1.15rem 0 1.85rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+      scrollbar-width: thin;
+    }
+
+    .roadmaps-nav {
+      display: flex;
+      gap: 0.65rem;
+      min-width: max-content;
+    }
+
+    .roadmap-tab-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.65rem 1rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      user-select: none;
+    }
+
+    .roadmap-tab-btn:hover {
+      background: var(--bg-surface-elevated);
+      border-color: var(--border-medium);
+      color: var(--text-main);
+      transform: translateY(-1px);
+    }
+
+    .roadmap-tab-btn.active {
+      background: var(--bg-surface-elevated);
+      border-color: var(--accent-gold);
+      color: #fff;
+      box-shadow: 0 4px 18px rgba(245, 158, 11, 0.15);
+    }
+
+    .tab-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text-dim);
+      transition: all var(--transition-fast);
+    }
+
+    .roadmap-tab-btn.active .tab-indicator {
+      background: var(--accent-gold);
+      box-shadow: 0 0 8px var(--accent-gold);
+    }
+
+    /* ==========================================================================
+       ROADMAP ACTIVE HEADER & OVERALL PROGRESS CARD
+       ========================================================================== */
+    .roadmap-panel {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .roadmap-header-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+    }
+
+    .roadmap-info-col {
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .roadmap-tags {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .tag-pill {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.2rem 0.55rem;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-muted);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .tag-pill.gold {
+      background: rgba(245, 158, 11, 0.12);
+      color: var(--accent-gold);
+      border-color: rgba(245, 158, 11, 0.3);
+    }
+
+    .roadmap-active-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.25rem;
+    }
+
+    .roadmap-active-desc {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    .roadmap-controls-col {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.45rem 0.9rem;
+      font-size: 0.84rem;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      text-decoration: none;
+      border: 1px solid transparent;
+      outline: none;
+    }
+
+    .btn-secondary {
+      background: var(--bg-surface);
+      border-color: var(--border-subtle);
+      color: var(--text-main);
+    }
+    .btn-secondary:hover {
+      background: var(--bg-surface-hover);
+      border-color: var(--border-medium);
+      color: #fff;
+    }
+
+    /* Global Progress Bar */
+    .progress-section {
+      background: var(--bg-card-inner);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+    }
+
+    .progress-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.65rem;
+      font-size: 0.85rem;
+    }
+
+    .progress-stats {
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
+      font-weight: 700;
+    }
+
+    .progress-stats .done-count {
+      color: #fff;
+      font-size: 1.05rem;
+    }
+    .progress-stats .percent-badge {
+      color: var(--accent-emerald);
+      font-size: 0.85rem;
+      background: rgba(16, 185, 129, 0.12);
+      padding: 0.1rem 0.45rem;
+      border-radius: var(--radius-full);
+      margin-left: 0.3rem;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #f59e0b 0%, #10b981 50%, #8b5cf6 100%);
+      border-radius: var(--radius-full);
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+    }
+
+    /* ==========================================================================
+       LEARN: TOPICS + RESOURCES SECTION
+       ========================================================================== */
+    .topics-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+
+    .section-title {
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+    }
+
+    .section-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Accordion Phase Card */
+    .phase-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .phase-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      transition: all var(--transition-normal);
+      overflow: hidden;
+    }
+
+    .phase-card:hover {
+      border-color: var(--border-medium);
+    }
+
+    .phase-card.all-completed {
+      border-color: rgba(16, 185, 129, 0.35);
+      background: linear-gradient(180deg, rgba(16, 185, 129, 0.03) 0%, var(--bg-card) 100%);
+    }
+
+    .phase-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.25rem;
+      cursor: pointer;
+      user-select: none;
+      background: var(--bg-surface);
+      transition: background var(--transition-fast);
+      gap: 1rem;
+    }
+
+    .phase-card-header:hover {
+      background: var(--bg-surface-elevated);
+    }
+
+    .phase-header-left {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .phase-month-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.2rem 0.6rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent-gold);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      border-radius: var(--radius-full);
+      background: rgba(245, 158, 11, 0.08);
+      white-space: nowrap;
+    }
+
+    .phase-title-text {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .phase-header-right {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .phase-counter-badge {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-dim);
+      background: rgba(255, 255, 255, 0.04);
+      padding: 0.2rem 0.6rem;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-subtle);
+      transition: all var(--transition-fast);
+    }
+
+    .phase-card.all-completed .phase-counter-badge {
+      color: var(--accent-emerald);
+      background: rgba(16, 185, 129, 0.12);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .chevron-icon {
+      width: 18px;
+      height: 18px;
+      color: var(--text-dim);
+      transition: transform var(--transition-normal);
+    }
+
+    .phase-card.open .chevron-icon {
+      transform: rotate(180deg);
+      color: var(--accent-gold);
+    }
+
+    /* Phase Body (Expanded) */
+    .phase-card-body {
+      display: none;
+      padding: 1.25rem;
+      border-top: 1px solid var(--border-subtle);
+      background: var(--bg-card);
+    }
+
+    .phase-card.open .phase-card-body {
+      display: block;
+    }
+
+    .phase-subdesc {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 1.15rem;
+      line-height: 1.5;
+    }
+
+    /* Topic Checkboxes */
+    .topics-checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .topic-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.65rem 0.85rem;
+      background: var(--bg-card-inner);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      user-select: none;
+    }
+
+    .topic-item:hover {
+      background: var(--bg-surface-elevated);
+      border-color: var(--border-medium);
+    }
+
+    .topic-item.checked {
+      background: rgba(16, 185, 129, 0.05);
+      border-color: rgba(16, 185, 129, 0.2);
+    }
+
+    /* Custom Checkbox */
+    .custom-checkbox {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      border: 1.5px solid rgba(255, 255, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+      flex-shrink: 0;
+      transition: all var(--transition-fast);
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .topic-item:hover .custom-checkbox {
+      border-color: var(--accent-gold);
+    }
+
+    .topic-item.checked .custom-checkbox {
+      background: var(--accent-emerald);
+      border-color: var(--accent-emerald);
+      box-shadow: 0 0 8px var(--accent-emerald-glow);
+    }
+
+    .check-svg {
+      width: 12px;
+      height: 12px;
+      fill: none;
+      stroke: #000;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0;
+      transform: scale(0.6);
+      transition: all 0.2s ease;
+    }
+
+    .topic-item.checked .check-svg {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .topic-text {
+      font-size: 0.86rem;
+      color: var(--text-main);
+      line-height: 1.45;
+      flex: 1;
+      transition: color var(--transition-fast);
+    }
+
+    .topic-item.checked .topic-text {
+      color: var(--text-dim);
+      text-decoration: line-through;
+    }
+
+    /* Resources Section inside Phase Card */
+    .resources-block {
+      padding-top: 1rem;
+      border-top: 1px dashed rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .resources-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .resource-links-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .res-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.65rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all var(--transition-fast);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .res-link.video {
+      background: rgba(244, 63, 94, 0.1);
+      color: #fb7185;
+      border-color: rgba(244, 63, 94, 0.25);
+    }
+    .res-link.video:hover {
+      background: rgba(244, 63, 94, 0.2);
+      border-color: #fb7185;
+      transform: translateY(-1px);
+    }
+
+    .res-link.book {
+      background: rgba(245, 158, 11, 0.1);
+      color: #fbbf24;
+      border-color: rgba(245, 158, 11, 0.25);
+    }
+    .res-link.book:hover {
+      background: rgba(245, 158, 11, 0.2);
+      border-color: #fbbf24;
+      transform: translateY(-1px);
+    }
+
+    .res-link.interactive {
+      background: rgba(16, 185, 129, 0.1);
+      color: #34d399;
+      border-color: rgba(16, 185, 129, 0.25);
+    }
+    .res-link.interactive:hover {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: #34d399;
+      transform: translateY(-1px);
+    }
+
+    .res-link.docs {
+      background: rgba(6, 182, 212, 0.1);
+      color: #38bdf8;
+      border-color: rgba(6, 182, 212, 0.25);
+    }
+    .res-link.docs:hover {
+      background: rgba(6, 182, 212, 0.2);
+      border-color: #38bdf8;
+      transform: translateY(-1px);
+    }
+
+    .res-icon {
+      font-size: 0.85rem;
+    }
+
+    /* ==========================================================================
+       FOOTER
+       ========================================================================== */
+    .footer {
+      margin-top: auto;
+      background: #050608;
+      border-top: 1px solid var(--border-subtle);
+      padding: 2.75rem 0 2rem;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 1.15rem;
+    }
+
+    .footer-rights-author {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.01em;
+    }
+    .footer-rights-author span {
+      color: var(--accent-gold);
+    }
+
+    .footer-contact-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-contact-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.86rem;
+      padding: 0.38rem 0.85rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-full);
+      transition: all var(--transition-fast);
+    }
+
+    .footer-contact-item:hover {
+      color: #fff;
+      border-color: var(--accent-gold);
+      background: var(--bg-surface-hover);
+      transform: translateY(-1px);
+    }
+
+    .footer-contact-item.github:hover {
+      border-color: #fff;
+    }
+
+    .footer-subnote {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      margin-top: 0.25rem;
+    }
+
+    /* ==========================================================================
+       RESPONSIVE DESIGN
+       ========================================================================== */
+    @media (max-width: 768px) {
+      .phase-card-header {
+        padding: 0.85rem 1rem;
+      }
+      .phase-title-text {
+        font-size: 0.9rem;
+      }
+      .roadmap-panel {
+        padding: 1.15rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Sticky Navigation (Cleaned: Logo & Status Badge only) -->
+  <header class="header">
+    <div class="container header-inner">
+      <a href="#" class="brand-logo" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+        <div class="brand-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+        </div>
+        <div class="brand-text">DevPathways<span>.dev</span></div>
+      </a>
+
+      <div class="header-badge">
+        <span>No login required · Auto-saved locally</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Hero -->
+  <main class="container" style="flex: 1;">
+    <section class="hero">
+      <div class="hero-badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+          <circle cx="12" cy="12" r="10"></circle>
+        </svg>
+        Curated Masteries & Free Verified Learning
+      </div>
+      <h1 class="hero-title">
+        Step-by-Step Developer Roadmaps <br>
+        <span class="gradient-text">Master In-Demand Tech with Free Resources</span>
+      </h1>
+      <p class="hero-subtitle">
+        Track your learning progress topic by topic. No login or account required — all your completed checkpoints and progress metrics are saved automatically in your browser's local storage.
+      </p>
+
+      <!-- Category Filter Tabs -->
+      <div class="category-filter-bar">
+        <button class="cat-chip active" onclick="filterCategory('All', this)">All Paths (8)</button>
+        <button class="cat-chip" onclick="filterCategory('Web Development', this)">Web Development</button>
+        <button class="cat-chip" onclick="filterCategory('Software Engineering', this)">Software Engineering</button>
+        <button class="cat-chip" onclick="filterCategory('Cloud & Infrastructure', this)">Cloud & DevOps</button>
+        <button class="cat-chip" onclick="filterCategory('Security & Defense', this)">Cybersecurity</button>
+        <button class="cat-chip" onclick="filterCategory('AI & Data Science', this)">AI & Python</button>
+      </div>
+
+      <!-- Roadmap Switcher Tabs -->
+      <div class="roadmaps-nav-scroll">
+        <div class="roadmaps-nav" id="roadmapsNavList">
+          <!-- Dynamically Generated Roadmaps List -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Active Roadmap Card & Progress Dashboard -->
+    <section class="roadmap-panel">
+      <div class="roadmap-header-top">
+        <div class="roadmap-info-col">
+          <div class="roadmap-tags">
+            <span class="tag-pill gold" id="activeCategoryTag">Software Engineering</span>
+            <span class="tag-pill" id="activeTechTag">Enterprise Java</span>
+          </div>
+          <h2 class="roadmap-active-title" id="activeRoadmapTitle">Spring Boot Backend-First Roadmap · 12 Months</h2>
+          <p class="roadmap-active-desc" id="activeRoadmapDesc">Comprehensive industry-standard roadmap to become an elite Spring Boot backend engineer from fundamental CS to scalable microservices.</p>
+        </div>
+
+        <div class="roadmap-controls-col">
+          <button class="btn btn-secondary" onclick="toggleExpandAll()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="7 13 12 18 17 13"></polyline>
+              <polyline points="7 6 12 11 17 6"></polyline>
+            </svg>
+            <span id="expandAllBtnText">Expand All</span>
+          </button>
+          <button class="btn btn-secondary" onclick="resetActiveRoadmap()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+              <path d="M3 3v5h5"></path>
+            </svg>
+            Reset all
+          </button>
+        </div>
+      </div>
+
+      <!-- Global Roadmap Progress Bar -->
+      <div class="progress-section">
+        <div class="progress-meta">
+          <div class="progress-stats">
+            <span class="done-count" id="progressDoneText">0 / 75 done</span>
+            <span class="percent-badge" id="progressPercentBadge">0%</span>
+          </div>
+          <div style="font-size: 0.78rem; color: var(--text-dim);" id="progressRemainingText">
+            All progress saved automatically in your browser
+          </div>
+        </div>
+        <div class="progress-track">
+          <div class="progress-bar-fill" id="progressBarFill"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Topics and Resources Header -->
+    <section>
+      <div class="topics-header">
+        <div class="section-title">LEARN: TOPICS + RESOURCES</div>
+        <div class="section-controls">
+          <span style="font-size: 0.78rem; color: var(--text-dim);" id="phasesCountText">10 Phases</span>
+        </div>
+      </div>
+
+      <!-- Phases Accordion List -->
+      <div class="phase-list" id="phaseListContainer">
+        <!-- Rendered by JavaScript -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-rights-author">
+        &copy; All rights reserved &mdash; <span>Quazi Naqibul Alam</span>
+      </div>
+
+      <div class="footer-contact-links">
+        <a href="https://github.com/Naqib2003" target="_blank" rel="noopener noreferrer" class="footer-contact-item github">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path>
+          </svg>
+          Github : https://github.com/Naqib2003
+        </a>
+
+        <a href="mailto:naqibalam10@gmail.com" class="footer-contact-item">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+          </svg>
+          mail : naqibalam10@gmail.com
+        </a>
+      </div>
+
+      <div class="footer-subnote">
+        No account required. All roadmap checkpoints persist locally in your browser.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Embedded Application Data & Interactive Logic -->
+  <script>
+    const ROADMAPS_DATA = {"springboot": {"id": "springboot", "title": "Spring Boot Backend-First Roadmap \u00b7 12 Months", "category": "Software Engineering", "tag": "Enterprise Java", "description": "Comprehensive industry-standard roadmap to become an elite Spring Boot backend engineer from fundamental CS to scalable microservices.", "badgeColor": "amber", "phases": [{"id": "sb-phase-0", "phaseNumber": "Phase 0", "duration": "Month 1", "title": "Dev Foundations", "description": "Essential development tooling, terminal workflows, and networking protocols used every day.", "topics": ["Git: clone, branch, commit, merge, rebase, resolve conflicts", "GitHub: push projects, pull requests, issue tracking, good READMEs", "Terminal basics (cd, ls, grep, curl, chmod, ssh, pipe & redirection)", "How HTTP works: methods (GET/POST/PUT/DELETE/PATCH), status codes, headers, JSON, cookies & sessions", "IntelliJ IDEA Community: debugger, refactoring, code navigation, shortcuts", "Maven & Gradle: pom.xml, build lifecycle, dependency scopes, plugins"], "resources": [{"type": "book", "name": "Pro Git Book (Free Official)", "url": "https://git-scm.com/book/en/v2"}, {"type": "interactive", "name": "Learn Git Branching (Interactive)", "url": "https://learngitbranching.js.org/"}, {"type": "docs", "name": "MDN: HTTP Overview & Status Codes", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview"}, {"type": "docs", "name": "Maven in 5 Minutes (Official Guide)", "url": "https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html"}, {"type": "video", "name": "freeCodeCamp: Git & GitHub Crash Course", "url": "https://www.youtube.com/watch?v=RGOj5yH7evk"}]}, {"id": "sb-phase-1", "phaseNumber": "Phase 1", "duration": "Months 1\u20132", "title": "Modern Java Deep Dive", "description": "Master Java 17/21 LTS features, clean OOP architecture, Collections, Lambdas, and JVM internals.", "topics": ["Java 17/21 LTS features: Records, Pattern Matching, Sealed Classes, Text Blocks", "Object-Oriented Programming: Encapsulation, Polymorphism, Inheritance, Abstraction, SOLID principles", "Java Collections Framework: List, Set, Map, Queue, Big-O complexity & internal implementations (HashMap, ArrayList)", "Functional Programming: Lambdas, Functional Interfaces (Predicate, Function, Consumer, Supplier)", "Java Stream API: map, filter, flatMap, reduce, collectors, parallel streams", "Exception Handling: Checked vs Unchecked exceptions, try-with-resources, custom domain exceptions", "Multithreading & Concurrency: Thread lifecycle, synchronized, ExecutorService, Virtual Threads (Project Loom)", "JVM Architecture: Memory model (Heap, Stack, Metaspace), Garbage Collection basics (G1, ZGC)"], "resources": [{"type": "book", "name": "Dev.java: Official Java Tutorials", "url": "https://dev.java/learn/"}, {"type": "video", "name": "freeCodeCamp: Java Programming for Beginners (Full Course)", "url": "https://www.youtube.com/watch?v=A74TOX803D0"}, {"type": "video", "name": "Java Brains: Java 8/17 Features Crash Course", "url": "https://www.youtube.com/watch?v=W_kU52XqYwE"}, {"type": "docs", "name": "Baeldung: Java Collections Framework Guide", "url": "https://www.baeldung.com/category/java/java-collections/"}]}, {"id": "sb-phase-2", "phaseNumber": "Phase 2", "duration": "Months 2\u20133", "title": "SQL & PostgreSQL Database Mastery", "description": "Relational schema design, query optimization, indexing strategies, and database transactions.", "topics": ["Relational Database Foundations: Schema design, normalization (1NF to 3NF), foreign keys", "Advanced SQL Queries: Aggregations, GROUP BY, HAVING, subqueries, Window functions", "SQL Joins: INNER, LEFT, RIGHT, FULL OUTER, CROSS joins and performance impacts", "Database Indexing: B-Tree indexes, Composite indexes, EXPLAIN ANALYZE query planning", "ACID Properties: Atomicity, Consistency, Isolation levels (Read Committed, Serializable), Durability", "PostgreSQL specific features: JSONB data type, full-text search, generated columns", "Database Migration Tools: Flyway and Liquibase schema version control"], "resources": [{"type": "interactive", "name": "SQLBolt: Interactive SQL Tutorial", "url": "https://sqlbolt.com/"}, {"type": "book", "name": "Use The Index, Luke! (SQL Indexing Guide)", "url": "https://use-the-index-luke.com/"}, {"type": "docs", "name": "PostgreSQL Official Documentation", "url": "https://www.postgresql.org/docs/"}, {"type": "video", "name": "freeCodeCamp: PostgreSQL Full Course for Beginners", "url": "https://www.youtube.com/watch?v=qw--VYLpxG4"}]}, {"id": "sb-phase-3", "phaseNumber": "Phase 3", "duration": "Months 3\u20135", "title": "Spring Boot Core + RESTful APIs", "description": "Dependency Injection, Spring MVC, REST architecture, input validation, and production observability.", "topics": ["Spring Core: Inversion of Control (IoC), Dependency Injection (@Component, @Service, @Repository, @Autowired)", "Bean Lifecycle: @PostConstruct, @PreDestroy, Bean scopes (Singleton, Prototype)", "Spring Boot Architecture: Auto-configuration, Spring Boot Starters, application.yml configuration", "Building RESTful APIs: @RestController, @RequestMapping, @GetMapping, @PostMapping, ResponseEntity", "Request Validation: Jakarta Validation (@NotNull, @Size, @Email, @Valid), custom validators", "Global Exception Handling: @ControllerAdvice, @ExceptionHandler, standardized ErrorResponse DTOs", "Lombok: @Data, @Builder, @RequiredArgsConstructor, @Slf4j for clean boilerplate reduction", "DTO Pattern: Mapping entities to DTOs with MapStruct or ModelMapper", "Pagination & Sorting: Spring Data Pageable, Page<T>, Sort", "Spring Boot Actuator: /health, /metrics, /info endpoints and application monitoring", "API Documentation: Springdoc OpenAPI / Swagger UI integration"], "resources": [{"type": "docs", "name": "Spring Boot Official Reference Guide", "url": "https://spring.io/projects/spring-boot"}, {"type": "video", "name": "Amigoscode: Spring Boot 3 Tutorial for Beginners", "url": "https://www.youtube.com/watch?v=9SGDpanrc8U"}, {"type": "interactive", "name": "Spring Initializr (Project Generator)", "url": "https://start.spring.io/"}, {"type": "docs", "name": "Baeldung: Building a RESTful API with Spring Boot", "url": "https://www.baeldung.com/building-a-restful-web-service-with-spring-and-java-based-configuration"}]}, {"id": "sb-phase-4", "phaseNumber": "Phase 4", "duration": "Months 5\u20136", "title": "Spring Data JPA & Hibernate", "description": "Object-Relational Mapping, entity lifecycle, relationship mapping, query generation, and caching.", "topics": ["JPA & Hibernate Core: @Entity, @Id, @GeneratedValue, EntityManager vs JpaRepository", "Entity Relationships: @OneToOne, @OneToMany, @ManyToOne, @ManyToMany, FetchType.LAZY vs EAGER", "Derived Query Methods: findByStatusAndCreatedAtOrderByDesc, custom JPQL with @Query", "Native SQL Queries & DTO Projections: Interface-based and class-based projections", "Solving the N+1 Query Problem: JOIN FETCH, @EntityGraph, batch fetching", "Auditing: @CreatedDate, @LastModifiedDate, AuditorAware for user tracking", "Transaction Management: @Transactional, propagation levels, rollback rules", "Caching with Redis: Spring Cache abstraction (@Cacheable, @CacheEvict, @CachePut) and Redis integration", "Soft Delete Pattern: @SQLDelete, @SQLRestriction / @Where clauses"], "resources": [{"type": "book", "name": "Vlad Mihalcea: High-Performance Java Persistence (Blog & Guides)", "url": "https://vladmihalcea.com/tutorials/"}, {"type": "docs", "name": "Spring Data JPA Official Guide", "url": "https://spring.io/projects/spring-data-jpa"}, {"type": "video", "name": "Java Guides: Spring Data JPA Course for Beginners", "url": "https://www.youtube.com/watch?v=c3hW21_FmOQ"}]}, {"id": "sb-phase-5", "phaseNumber": "Phase 5", "duration": "Months 6\u20137", "title": "Spring Security 6 & JWT Authentication", "description": "Industry-grade security filter chains, stateless JWT authentication, RBAC, and OAuth2 social logins.", "topics": ["Spring Security 6 Architecture: SecurityFilterChain, SecurityContextHolder, AuthenticationManager", "User Authentication: UserDetailsService, PasswordEncoder (BCrypt), UserDetails", "JWT (JSON Web Token): Generation, signing (HMAC / RSA), validation, custom OncePerRequestFilter", "Refresh Token Pattern: Safe rotation, revocation, and Redis token blacklisting", "Role-Based Access Control (RBAC): @PreAuthorize, hasRole(), hasAuthority(), Method Security", "CORS & CSRF: Proper CORS configuration for modern SPA frontends and stateless CSRF disabling", "OAuth2 Social Login: Google / GitHub OAuth2 Client login integration", "Rate Limiting & Brute Force Defense: Bucket4j / Redis token bucket implementation", "Security Best Practices: Secure headers, sanitization against XSS & SQLi"], "resources": [{"type": "docs", "name": "Spring Security Official Architecture Guide", "url": "https://docs.spring.io/spring-security/reference/index.html"}, {"type": "video", "name": "Laurentius Pilca: Spring Security Explained (Full YouTube Playlist)", "url": "https://www.youtube.com/playlist?list=PLqq-6Pq4lTTYTEooakHchTGglSvkKEfcE"}, {"type": "book", "name": "Baeldung: Spring Security Tutorials & Reference", "url": "https://www.baeldung.com/security-spring"}]}, {"id": "sb-phase-6", "phaseNumber": "Phase 6", "duration": "Months 7\u20138", "title": "Automated Testing & Quality Assurance", "description": "Unit testing, mocking dependencies, integration testing with real databases using Testcontainers.", "topics": ["Testing Pyramid: Unit tests vs Integration tests vs End-to-End tests", "JUnit 5: @Test, @ParameterizedTest, @BeforeEach, @DisplayName, Assertions & Assumptions", "Mockito: @Mock, @InjectMocks, when().thenReturn(), verify(), ArgumentCaptor", "Testing Spring Controllers: @WebMvcTest, MockMvc, testing JSON responses and status codes", "Testing Spring Data Repositories: @DataJpaTest, TestEntityManager", "Integration Testing with Testcontainers: Spinning up real Dockerized PostgreSQL and Redis containers in tests", "@SpringBootTest: Full application context integration tests and WireMock for external APIs"], "resources": [{"type": "docs", "name": "Testcontainers Official Java Guide", "url": "https://testcontainers.com/getting-started/"}, {"type": "video", "name": "Marco Behler: Testing Spring Boot Applications Course", "url": "https://www.youtube.com/watch?v=Geq68OVyGjc"}, {"type": "docs", "name": "JUnit 5 User Guide", "url": "https://junit.org/junit5/docs/current/user-guide/"}]}, {"id": "sb-phase-7", "phaseNumber": "Phase 7", "duration": "Month 8", "title": "Docker, CI/CD & Cloud Deployment", "description": "Containerize Spring Boot apps, write GitHub Actions pipelines, and deploy production instances.", "topics": ["Dockerizing Spring Boot: Multi-stage Dockerfile, layered jar extraction, JRE slim base images", "Docker Compose: Multi-container local environments (Spring Boot + PostgreSQL + Redis + pgAdmin)", "GitHub Actions CI/CD: Automated builds, running JUnit tests, Docker image publishing to GitHub Container Registry / Docker Hub", "Environment Configuration: Externalized configurations using environment variables and secrets", "Cloud Deployment: Deploying containerized apps to Render, Railway, AWS EC2, or DigitalOcean", "Production Logging & Monitoring: Logback configuration, SLF4J MDC (Mapped Diagnostic Context) for request tracing"], "resources": [{"type": "docs", "name": "Spring Boot Docker Official Guide", "url": "https://spring.io/guides/gs/spring-boot-docker/"}, {"type": "video", "name": "TechWorld with Nana: Docker Course for Beginners", "url": "https://www.youtube.com/watch?v=3c-iBn73dDE"}, {"type": "interactive", "name": "GitHub Actions Documentation & Quickstarts", "url": "https://docs.github.com/en/actions"}]}, {"id": "sb-phase-8", "phaseNumber": "Phase 8", "duration": "Month 9 (short)", "title": "Frontend Basics (Just Enough for Backend Devs)", "description": "Learn enough client-side concepts to integrate smoothly with frontend teams and build admin portals.", "topics": ["Modern HTML5 semantic elements & CSS fundamentals (Flexbox, Grid, form controls)", "JavaScript Fetch API & Axios: Making GET/POST requests, handling JSON, async/await", "CORS troubleshooting in browser DevTools (Network tab, Request/Response headers)", "JWT storage patterns in browser: HttpOnly Cookies vs LocalStorage considerations", "Building a simple React or Vue client: Consuming backend REST endpoints with CRUD operations", "Server-Side Rendering alternative: Thymeleaf + Tailwind CSS for quick admin panels"], "resources": [{"type": "interactive", "name": "MDN Web Docs: Learn Web Development", "url": "https://developer.mozilla.org/en-US/docs/Learn"}, {"type": "video", "name": "Traversy Media: JavaScript Crash Course for Beginners", "url": "https://www.youtube.com/watch?v=hdI2bqOjy3c"}, {"type": "docs", "name": "Thymeleaf Official Tutorials", "url": "https://www.thymeleaf.org/documentation.html"}]}, {"id": "sb-phase-9", "phaseNumber": "Phase 9", "duration": "Months 9\u201312", "title": "Interview Prep & Scalable System Design", "description": "Crack technical interviews at top tier tech companies with system design and distributed patterns.", "topics": ["Data Structures & Algorithms: Arrays, Two Pointers, Sliding Window, Trees, Graphs, Dynamic Programming on LeetCode", "Distributed Messaging: Apache Kafka or RabbitMQ fundamentals (Producers, Consumers, Consumer Groups, Partitions)", "Microservices Architecture: API Gateway (Spring Cloud Gateway), Service Discovery, Distributed Tracing (Zipkin/Micrometer)", "System Design Core Concepts: Scalability, Load Balancing, Horizontal vs Vertical scaling, Caching strategies, Database Sharding", "Designing Real-World Systems: URL Shortener, Twitter/X News Feed, E-commerce Checkout, Chat Application", "Behavioral & Resume Prep: STAR method, building production-ready portfolio projects, open-source contributions"], "resources": [{"type": "book", "name": "System Design Primer by Donne Martin (GitHub)", "url": "https://github.com/donnemartin/system-design-primer"}, {"type": "interactive", "name": "NeetCode.io: Curated DSA Roadmap & Blind 75", "url": "https://neetcode.io/"}, {"type": "video", "name": "Gaurav Sen: System Design Fundamentals (YouTube Playlist)", "url": "https://www.youtube.com/playlist?list=PLMCXHnjXnTnvo6alSjVkgxV-VH6EPyvoX"}]}]}, "mern": {"id": "mern", "title": "MERN Stack Full-Stack Web Development \u00b7 9 Months", "category": "Web Development", "tag": "JavaScript & TypeScript", "description": "Complete path to becoming a production-grade full-stack developer using MongoDB, Express.js, React.js, and Node.js.", "badgeColor": "emerald", "phases": [{"id": "mern-phase-0", "phaseNumber": "Phase 0", "duration": "Month 1", "title": "Web Foundations & Advanced JavaScript (ES6+)", "description": "Master the DOM, modern asynchronous JavaScript, prototypes, and tooling.", "topics": ["HTML5 Semantic elements, accessibility (a11y), SEO meta tags", "CSS3 Flexbox, CSS Grid, custom properties (variables), media queries", "Modern JavaScript (ES6+): let/const, arrow functions, destructuring, spread/rest, template literals", "Asynchronous JS: Event Loop, Callbacks, Promises, async/await, error handling", "JavaScript Modules (ESM vs CommonJS), Array methods (map, filter, reduce, find, some)", "Browser APIs: LocalStorage, SessionStorage, Fetch API, DOM manipulation"], "resources": [{"type": "book", "name": "JavaScript.info: The Modern JavaScript Tutorial", "url": "https://javascript.info/"}, {"type": "book", "name": "Eloquent JavaScript (Free Digital Book)", "url": "https://eloquentjavascript.net/"}, {"type": "video", "name": "freeCodeCamp: JavaScript Algorithms and Data Structures", "url": "https://www.youtube.com/watch?v=jS4aFq5-91M"}]}, {"id": "mern-phase-1", "phaseNumber": "Phase 1", "duration": "Months 2\u20133", "title": "React.js Core & Component Architecture", "description": "Declarative UI engineering, Hooks, Component state, and Client-Side Routing.", "topics": ["React fundamentals: JSX syntax, Virtual DOM, Components, Props vs State", "Core Hooks: useState, useEffect (dependencies & cleanup), useRef, useMemo, useCallback", "Forms & Controlled Components: handling inputs, validation with Zod / React Hook Form", "Component Composition: Lifting state up, children props, Compound components", "Client-Side Routing: React Router v6 (routes, loaders, actions, dynamic params, protected routes)", "Styling in React: Tailwind CSS, CSS Modules, Styled Components"], "resources": [{"type": "docs", "name": "React Official Documentation (react.dev)", "url": "https://react.dev/"}, {"type": "video", "name": "freeCodeCamp: React 18 Course for Beginners", "url": "https://www.youtube.com/watch?v=bMknfKXIFA8"}, {"type": "interactive", "name": "Scrimba: Learn React Interactive Course", "url": "https://scrimba.com/learn/learnreact"}]}, {"id": "mern-phase-2", "phaseNumber": "Phase 2", "duration": "Month 4", "title": "Advanced State Management & Server State", "description": "Manage complex UI state, remote data caching, and asynchronous workflows.", "topics": ["React Context API for theme, auth, and global app settings", "Redux Toolkit (RTK): Store, Slices, Reducers, createAsyncThunk, or lightweight Zustand", "TanStack Query (React Query): Server state, query keys, automatic cache invalidation, mutations, optimistic updates", "Performance optimization: React.memo, code splitting with React.lazy and Suspense", "TypeScript with React: Typing props, events, hooks, and API responses"], "resources": [{"type": "docs", "name": "TanStack Query Official Guides", "url": "https://tanstack.com/query/latest"}, {"type": "docs", "name": "Redux Toolkit Quick Start", "url": "https://redux-toolkit.js.org/tutorials/quick-start"}, {"type": "book", "name": "Total TypeScript Tutorials by Matt Pocock", "url": "https://www.totaltypescript.com/tutorials"}]}, {"id": "mern-phase-3", "phaseNumber": "Phase 3", "duration": "Months 5\u20136", "title": "Node.js & Express.js Backend Architecture", "description": "Build high-throughput RESTful APIs with Node.js and Express.", "topics": ["Node.js Architecture: V8 engine, Libuv, non-blocking I/O, Event-driven architecture, Buffer & Streams", "Express.js Basics: Routing, request/response cycle, middleware concept (built-in, third-party, custom)", "REST API Design: Clean URL structure, HTTP status codes, standard JSON payloads", "Error Handling Middleware: Centralized error handling, async error wrapper, custom ApiError class", "Security Essentials: Helmet, CORS, express-rate-limit, mongo-sanitize, HPP (HTTP Parameter Pollution)", "File Uploads: Multer integration, streaming uploads to Cloudinary or AWS S3"], "resources": [{"type": "book", "name": "Node.js Design Patterns (Free Articles & Official Guides)", "url": "https://nodejs.org/en/learn"}, {"type": "video", "name": "freeCodeCamp: Node.js and Express.js Full Course", "url": "https://www.youtube.com/watch?v=Oe421EPjeBE"}, {"type": "docs", "name": "Express.js Official Guide & Best Practices", "url": "https://expressjs.com/"}]}, {"id": "mern-phase-4", "phaseNumber": "Phase 4", "duration": "Month 7", "title": "MongoDB & Mongoose ODM", "description": "NoSQL document database schema modeling, aggregation pipelines, and indexing.", "topics": ["MongoDB Foundations: Documents, Collections, BSON format, MongoDB Atlas cloud setup", "Mongoose ODM: Schema definitions, Models, Types, Validation rules, Pre/Post middleware hooks", "Data Modeling: Embedding documents vs Referencing (normalized vs denormalized patterns)", "MongoDB Aggregation Pipeline: $match, $group, $lookup, $project, $unwind, $facet", "Indexing: Single field, compound indexes, text indexes, TTL indexes for session expiry", "Transactions in MongoDB: Multi-document ACID transactions with sessions"], "resources": [{"type": "interactive", "name": "MongoDB University: Free Official Courses", "url": "https://learn.mongodb.com/"}, {"type": "docs", "name": "Mongoose Official Documentation", "url": "https://mongoosejs.com/docs/guide.html"}, {"type": "video", "name": "Web Dev Simplified: Learn MongoDB in 30 Minutes", "url": "https://www.youtube.com/watch?v=ofme2o29ngU"}]}, {"id": "mern-phase-5", "phaseNumber": "Phase 5", "duration": "Months 8\u20139", "title": "Full-Stack Integration, Real-Time & Production Deploy", "description": "Auth, WebSockets, payment integration, Dockerization, and cloud deployment.", "topics": ["Authentication: JWT in HttpOnly secure cookies, refresh token rotation, bcrypt password hashing", "Real-Time Communication: Socket.io for live chats, notifications, and real-time feeds", "Payment Processing: Stripe Checkout / Webhooks integration for e-commerce", "Production Build: Vite production bundling, compression, environment variable isolation (.env)", "Deployment: Deploying React frontend on Vercel/Netlify and Express backend on Render/Railway/Fly.io", "CI/CD: GitHub Actions for automated linting, test suites, and deployments"], "resources": [{"type": "interactive", "name": "Full Stack Open (University of Helsinki Free Course)", "url": "https://fullstackopen.com/en/"}, {"type": "video", "name": "Traversy Media: MERN Stack Front To Back", "url": "https://www.youtube.com/watch?v=-0exw-9YJBo"}, {"type": "docs", "name": "Socket.io Official Get Started Guide", "url": "https://socket.io/get-started/chat"}]}]}, "phplaravel": {"id": "phplaravel", "title": "PHP 8 & Modern Laravel 11 Roadmap \u00b7 8 Months", "category": "Web Development", "tag": "PHP & Modern Laravel", "description": "Become an elite Laravel developer: modern PHP 8+, Eloquent ORM, Inertia.js, Livewire, Queues, and cloud scaling.", "badgeColor": "rose", "phases": [{"id": "lar-phase-0", "phaseNumber": "Phase 0", "duration": "Month 1", "title": "Modern PHP 8+ Foundations", "description": "Master strictly-typed modern PHP, OOP principles, Composer, and PSR standards.", "topics": ["Modern PHP 8+ Syntax: Typed properties, Match expressions, Named arguments, Constructor promotion", "Nullsafe operator, Enums, Fibers, Attributes (annotations in PHP)", "Object-Oriented PHP: Classes, Interfaces, Abstract classes, Traits, Namespaces", "Dependency Management: Composer, composer.json, autoloading (PSR-4)", "PHP Standards Recommendations: PSR-1, PSR-4, PSR-12 coding style conventions", "PHP PDO & MySQL: Prepared statements, SQL injection prevention, error modes"], "resources": [{"type": "interactive", "name": "PHP: The Right Way (Best Practices Guide)", "url": "https://phptherightway.com/"}, {"type": "docs", "name": "PHP Official Documentation", "url": "https://www.php.net/manual/en/"}, {"type": "video", "name": "freeCodeCamp: PHP Full Course for Beginners", "url": "https://www.youtube.com/watch?v=OK_JCtrrv-c"}]}, {"id": "lar-phase-1", "phaseNumber": "Phase 1", "duration": "Months 2\u20133", "title": "Laravel 11 Fundamentals & Core Architecture", "description": "Understand Laravel's lifecycle, routing, middleware, Blade templates, and requests.", "topics": ["Laravel Architecture: Request lifecycle, Service Container, Service Providers, Facades", "Routing & Controllers: Route parameters, route model binding, Resource controllers, Invokable controllers", "Blade Templating Engine: Layouts, Components, Directives (@if, @foreach, @auth, @csrf)", "Form Requests & Validation: Validation rules, custom FormRequest classes, customized error messages", "Middleware: Creating custom middleware, route grouping, global middleware"], "resources": [{"type": "video", "name": "Laracasts: Laravel 11 From Scratch (Free Series)", "url": "https://laracasts.com/series/30-days-to-learn-laravel-11"}, {"type": "docs", "name": "Laravel 11 Official Documentation", "url": "https://laravel.com/docs/11.x"}, {"type": "video", "name": "Traversy Media: Laravel Crash Course", "url": "https://www.youtube.com/watch?v=MYyJ4PuL4pY"}]}, {"id": "lar-phase-2", "phaseNumber": "Phase 2", "duration": "Months 4\u20135", "title": "Eloquent ORM & Database Mastery", "description": "Master migrations, relationships, query scopes, eager loading, and database seeders.", "topics": ["Migrations & Schema Builder: Table definitions, foreign keys, indexes, rollbacks", "Seeders & Model Factories: Generating realistic mock data using Faker", "Eloquent Relationships: hasOne, hasMany, belongsTo, belongsToMany (pivot tables), polymorphic relations", "Query Optimization: Eager loading (with()), preventLazyLoading, Query scopes, Subquery selects", "Mutators, Accessors & Attribute Casting (casts method in Laravel 11)", "Database Transactions: DB::transaction, pessimistic & optimistic locking"], "resources": [{"type": "docs", "name": "Laravel Eloquent Relationships In-Depth", "url": "https://laravel.com/docs/11.x/eloquent-relationships"}, {"type": "book", "name": "Laravel Daily: Eloquent Optimization Tips", "url": "https://laraveldaily.com/"}, {"type": "video", "name": "Coder's Tape: Laravel Advanced Eloquent", "url": "https://www.youtube.com/watch?v=F0f5_iE3R3g"}]}, {"id": "lar-phase-3", "phaseNumber": "Phase 3", "duration": "Month 6", "title": "Authentication, API Development & Security", "description": "Breeze, Sanctum API tokens, Role permissions, and rate limiting.", "topics": ["Starter Kits: Laravel Breeze (Blade, Inertia React, Inertia Vue)", "Authorization: Gates and Policies for resource protection", "Building RESTful APIs: API Resource classes (JsonResource), standardized responses", "API Authentication: Laravel Sanctum (token-based and SPA cookie-based auth)", "Security hardening: CSRF protection, SQL injection prevention, rate limiting with ThrottleRequests", "Role & Permissions Management: Spatie Laravel-Permission package"], "resources": [{"type": "docs", "name": "Laravel Sanctum Official Guide", "url": "https://laravel.com/docs/11.x/sanctum"}, {"type": "docs", "name": "Spatie Permission Documentation", "url": "https://spatie.be/docs/laravel-permission/v6/introduction"}]}, {"id": "lar-phase-4", "phaseNumber": "Phase 4", "duration": "Months 7\u20138", "title": "Modern Stacks (Livewire 3 / Inertia.js), Queues & Deployment", "description": "Build dynamic reactive web apps without writing plain JavaScript APIs, background jobs, and servers.", "topics": ["Laravel Livewire 3: Reactive components, wire:model, real-time validation, Alpine.js", "Alternative modern stack: Inertia.js with React / Vue 3 (monolithic SPA experience)", "Queues & Background Jobs: Redis queue driver, Job retries, Failed jobs, Horizon dashboard", "Task Scheduling: Cron job management with Laravel's scheduler", "Testing with Pest PHP: Unit and Feature tests, mocking facades, database assertions", "Deployment & Production: Laravel Sail (Docker), Laravel Forge / Ploi, Nginx configuration, SSL with Certbot"], "resources": [{"type": "docs", "name": "Livewire 3 Official Docs & Quickstart", "url": "https://livewire.laravel.com/docs/quickstart"}, {"type": "interactive", "name": "Inertia.js The Modern Monolith Guide", "url": "https://inertiajs.com/"}, {"type": "docs", "name": "Pest PHP Testing Framework", "url": "https://pestphp.com/"}]}]}, "devops": {"id": "devops", "title": "DevOps & Site Reliability Engineering (SRE) \u00b7 10 Months", "category": "Cloud & Infrastructure", "tag": "Infrastructure & Automation", "description": "From Linux internals and Docker to Kubernetes, Infrastructure as Code (Terraform), CI/CD, and Prometheus observability.", "badgeColor": "cyan", "phases": [{"id": "do-phase-0", "phaseNumber": "Phase 0", "duration": "Month 1", "title": "Linux Administration & Shell Scripting", "description": "The operating system foundation for all production servers and cloud instances.", "topics": ["Linux OS Fundamentals: File system hierarchy (FHS), permissions (chmod, chown), users and groups", "Process & Resource Monitoring: top, htop, ps, kill, systemctl, journalctl, dmesg", "Networking Commands: ip, netstat, ss, curl, wget, dig, ping, traceroute, iptables/ufw", "Bash Scripting: Variables, loops, conditions, exit codes, functions, cron jobs, automation", "Secure Shell (SSH): Key generation, config files, agent forwarding, secure server hardening"], "resources": [{"type": "interactive", "name": "OverTheWire: Bandit (Linux Command Line Game)", "url": "https://overthewire.org/wargames/bandit/"}, {"type": "book", "name": "Linux Journey (Free Guided Lessons)", "url": "https://linuxjourney.com/"}, {"type": "video", "name": "freeCodeCamp: Linux for Beginners Course", "url": "https://www.youtube.com/watch?v=sWbGOq-74l8"}]}, {"id": "do-phase-1", "phaseNumber": "Phase 1", "duration": "Months 2\u20133", "title": "Containerization with Docker", "description": "Container architecture, multi-stage builds, networking, and multi-container orchestration.", "topics": ["Container Concepts: Namespaces, cgroups, Containers vs Virtual Machines", "Docker CLI: run, ps, exec, logs, stop, rm, images, build, system prune", "Writing Production Dockerfiles: Base images (Alpine/Distroless), caching layers, non-root users", "Multi-Stage Builds: Minimizing container image sizes for Go, Java, Node, Python", "Docker Volumes & Bind Mounts: Persistent data management for databases", "Docker Networking: Bridge, host, overlay networks, container DNS resolution", "Docker Compose: Multi-service local development stacks with healthchecks"], "resources": [{"type": "docs", "name": "Docker Official Documentation", "url": "https://docs.docker.com/get-started/"}, {"type": "video", "name": "TechWorld with Nana: Docker Tutorial for Beginners", "url": "https://www.youtube.com/watch?v=3c-iBn73dDE"}, {"type": "interactive", "name": "Play with Docker (Free Sandbox in Browser)", "url": "https://labs.play-with-docker.com/"}]}, {"id": "do-phase-2", "phaseNumber": "Phase 2", "duration": "Months 4\u20135", "title": "Continuous Integration & Deployment (CI/CD)", "description": "Automate testing, container building, vulnerability scanning, and multi-environment deployments.", "topics": ["CI/CD Core Concepts: Continuous Integration vs Continuous Delivery vs Continuous Deployment", "GitHub Actions / GitLab CI: Workflow syntax, triggers, jobs, steps, environment secrets", "Automated Testing & Linting: Running unit tests, code style linters, code coverage badges", "Security in Pipelines: Secret scanning (TruffleHog), container vulnerability scans (Trivy), SAST", "Container Registry: Publishing versioned images to GHCR, Docker Hub, or AWS ECR", "Deployment Strategies: Rolling updates, Blue-Green deployments, Canary releases"], "resources": [{"type": "docs", "name": "GitHub Actions Official Docs", "url": "https://docs.github.com/en/actions"}, {"type": "video", "name": "TechWorld with Nana: GitHub Actions Tutorial", "url": "https://www.youtube.com/watch?v=R8_veQiYBjI"}, {"type": "docs", "name": "GitLab CI/CD Quick Start", "url": "https://docs.gitlab.com/ee/ci/"}]}, {"id": "do-phase-3", "phaseNumber": "Phase 3", "duration": "Months 6\u20137", "title": "Infrastructure as Code (IaC) with Terraform & Ansible", "description": "Declarative cloud provisioning, state management, and server configuration management.", "topics": ["IaC Philosophy: Immutable infrastructure vs configuration drift", "Terraform Fundamentals: HCL syntax, providers, resources, data sources, variables, outputs", "Terraform State Management: Remote backends (S3/DynamoDB lock), state locking, terraform import", "Terraform Modules: Writing reusable infrastructure modules and environment separation (dev/prod)", "Ansible Essentials: Playbooks, tasks, inventory files, roles, idempotency for host configuration"], "resources": [{"type": "docs", "name": "HashiCorp: Terraform Tutorials & Guides", "url": "https://developer.hashicorp.com/terraform/tutorials"}, {"type": "video", "name": "freeCodeCamp: Terraform Course for Beginners", "url": "https://www.youtube.com/watch?v=SLB_c_ayRMo"}, {"type": "docs", "name": "Ansible Getting Started Guide", "url": "https://docs.ansible.com/ansible/latest/getting_started/index.html"}]}, {"id": "do-phase-4", "phaseNumber": "Phase 4", "duration": "Months 8\u20139", "title": "Container Orchestration with Kubernetes (K8s)", "description": "Production container orchestration, scaling, self-healing, ingress, and Helm packages.", "topics": ["Kubernetes Architecture: Control plane (API server, etcd, scheduler) and Worker nodes (kubelet, kube-proxy)", "Core Resources: Pods, ReplicaSets, Deployments, Namespaces, Labels and Selectors", "Services & Networking: ClusterIP, NodePort, LoadBalancer, Ingress controllers (NGINX/Traefik)", "Configuration & Storage: ConfigMaps, Secrets, PersistentVolumes (PV), PersistentVolumeClaims (PVC)", "Application Lifecycle: Resource limits & requests, Liveness & Readiness probes, Horizontal Pod Autoscaler (HPA)", "Package Management with Helm: Helm charts, values.yaml, deploying off-the-shelf software", "GitOps with ArgoCD or Flux: Declarative continuous delivery inside Kubernetes"], "resources": [{"type": "interactive", "name": "Kubernetes Official Tutorials (Interactive)", "url": "https://kubernetes.io/docs/tutorials/"}, {"type": "video", "name": "TechWorld with Nana: Kubernetes Full Course (4 Hours)", "url": "https://www.youtube.com/watch?v=X48VuDVv0do"}, {"type": "interactive", "name": "Killercoda: Interactive Kubernetes Scenarios", "url": "https://killercoda.com/playgrounds/scenario/kubernetes"}]}, {"id": "do-phase-5", "phaseNumber": "Phase 5", "duration": "Month 10", "title": "Monitoring, Logging & Site Reliability Engineering (SRE)", "description": "Full-stack observability with Prometheus, Grafana, OpenTelemetry, and incident management.", "topics": ["Observability Pillars: Metrics, Logs, Traces", "Metrics Collection: Prometheus architecture, PromQL queries, Node Exporter, custom application metrics", "Visualization: Grafana dashboards, alerting rules, Slack/PagerDuty notification channels", "Centralized Logging: Grafana Loki / Promtail or ELK Stack (Elasticsearch, Logstash, Kibana)", "Distributed Tracing: OpenTelemetry and Jaeger for tracking microservices latency", "SRE Foundations: Service Level Objectives (SLOs), Service Level Indicators (SLIs), Error budgets, blameless post-mortems"], "resources": [{"type": "book", "name": "Google SRE Books (Free Online Edition)", "url": "https://sre.google/books/"}, {"type": "docs", "name": "Prometheus Getting Started Guide", "url": "https://prometheus.io/docs/introduction/first_steps/"}, {"type": "interactive", "name": "Grafana Tutorials & Play Sandbox", "url": "https://grafana.com/tutorials/"}]}]}, "cloud": {"id": "cloud", "title": "Cloud Computing & AWS Architecture \u00b7 8 Months", "category": "Cloud & Infrastructure", "tag": "AWS & Architecture", "description": "Master cloud architectural patterns, VPC networking, Serverless, IAM security, and resilient systems.", "badgeColor": "orange", "phases": [{"id": "cc-phase-0", "phaseNumber": "Phase 0", "duration": "Month 1", "title": "Cloud Fundamentals & Cloud Economics", "description": "Core value proposition of cloud computing, shared responsibility model, and cost management.", "topics": ["Cloud Service Models: IaaS, PaaS, SaaS, FaaS (Serverless)", "Cloud Deployment Models: Public, Private, Hybrid, Multi-cloud", "AWS Global Infrastructure: Regions, Availability Zones (AZs), Edge Locations, Points of Presence", "Shared Responsibility Model: What the cloud provider manages vs what you manage", "Cost Management: AWS Free Tier, Cost Explorer, Budgets & billing alerts, Reserved vs Spot instances"], "resources": [{"type": "docs", "name": "AWS Cloud Practitioner Essentials (Free Course)", "url": "https://aws.amazon.com/training/digital/aws-cloud-practitioner-essentials/"}, {"type": "video", "name": "freeCodeCamp: AWS Certified Cloud Practitioner Full Course", "url": "https://www.youtube.com/watch?v=SOTamWNgDKc"}, {"type": "book", "name": "AWS Well-Architected Framework Whitepapers", "url": "https://aws.amazon.com/architecture/well-architected/"}]}, {"id": "cc-phase-1", "phaseNumber": "Phase 1", "duration": "Months 2\u20133", "title": "Cloud Networking & Virtual Private Cloud (VPC)", "description": "Architect secure isolated cloud networks, subnets, route tables, and gateways.", "topics": ["VPC Architecture: CIDR blocks, IPv4 addressing, custom VPC creation", "Public vs Private Subnets: Bastion hosts, NAT Gateways vs NAT Instances", "Routing & Gateways: Internet Gateways (IGW), Route Tables, VPC Peering", "Network Security: Security Groups (stateful) vs Network Access Control Lists (NACLs - stateless)", "DNS & Content Delivery: AWS Route 53 (DNS routing policies) and CloudFront CDN integration"], "resources": [{"type": "docs", "name": "AWS VPC User Guide (Official Documentation)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html"}, {"type": "video", "name": "TechWorld with Nana: AWS VPC Explained", "url": "https://www.youtube.com/watch?v=jZbb_t9d_48"}]}, {"id": "cc-phase-2", "phaseNumber": "Phase 2", "duration": "Months 4\u20135", "title": "Compute, Storage & Managed Databases", "description": "Elastic compute, auto-scaling, high availability, S3 object storage, and RDS databases.", "topics": ["Compute: EC2 instance families (t3, c6, m6), AMIs, User data startup scripts", "Scalability: Elastic Load Balancing (Application Load Balancer - ALB) and Auto Scaling Groups (ASG)", "Storage: Amazon S3 (storage classes, lifecycle policies, bucket policies, presigned URLs), EBS volume types, EFS shared filesystem", "Relational Databases: Amazon RDS (PostgreSQL/MySQL), Multi-AZ deployments, Read Replicas, Aurora Serverless", "NoSQL Databases: Amazon DynamoDB (Partition keys, Sort keys, Global Secondary Indexes, On-Demand pricing)"], "resources": [{"type": "docs", "name": "Amazon S3 Official Documentation", "url": "https://docs.aws.amazon.com/s3/"}, {"type": "video", "name": "Stephane Maarek: AWS Solutions Architect Associate Previews", "url": "https://www.youtube.com/watch?v=Ia-UEYYR44s"}]}, {"id": "cc-phase-3", "phaseNumber": "Phase 3", "duration": "Month 6", "title": "Serverless Architecture & Event-Driven Systems", "description": "Build modern serverless microservices with AWS Lambda, API Gateway, SQS, and SNS.", "topics": ["AWS Lambda: Execution environment, Cold starts, Concurrency limits, Environment variables, Layering", "Amazon API Gateway: REST vs HTTP APIs, integrations with Lambda, authorizers, CORS", "Messaging & Queuing: Amazon SQS (Simple Queue Service - standard vs FIFO queues, dead-letter queues)", "Pub/Sub & Notifications: Amazon SNS (Simple Notification Service) and Amazon EventBridge event routing", "Step Functions: Orchestrating multi-step serverless workflows and state machines"], "resources": [{"type": "docs", "name": "Serverless Land: Free Patterns & Guides by AWS", "url": "https://serverlessland.com/"}, {"type": "video", "name": "freeCodeCamp: AWS Lambda & Serverless Architecture Course", "url": "https://www.youtube.com/watch?v=71wz4npstBc"}]}, {"id": "cc-phase-4", "phaseNumber": "Phase 4", "duration": "Months 7\u20138", "title": "Cloud Security, IAM & Enterprise Solutions Architecture", "description": "Least-privilege IAM policies, KMS encryption, disaster recovery, and multi-account AWS Organizations.", "topics": ["AWS IAM: Users, Groups, Roles, Policies (JSON policy evaluation logic, Condition blocks)", "Data Protection: AWS KMS (Key Management Service) customer-managed keys, AWS Secrets Manager", "Cloud Security Monitoring: AWS CloudTrail (audit logs), CloudWatch Logs & Alarms, AWS WAF (Web Application Firewall)", "Disaster Recovery (DR) Strategies: Backup & Restore, Pilot Light, Warm Standby, Multi-Region Active-Active", "High Availability Case Studies: Architecting a resilient multi-tier web application"], "resources": [{"type": "docs", "name": "AWS Security Best Practices Whitepaper", "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-security-best-practices/welcome.html"}, {"type": "book", "name": "AWS Architecture Center: Reference Architectures", "url": "https://aws.amazon.com/architecture/"}]}]}, "cybersecurity": {"id": "cybersecurity", "title": "Cybersecurity & Ethical Hacking Roadmap \u00b7 10 Months", "category": "Security & Defense", "tag": "Offensive & Defensive Security", "description": "Master network defense, OWASP Top 10 web vulnerabilities, Burp Suite penetration testing, cryptography, and SOC analysis.", "badgeColor": "red", "phases": [{"id": "sec-phase-0", "phaseNumber": "Phase 0", "duration": "Month 1", "title": "Security Foundations & Computer Networking", "description": "OSI model, TCP/IP handshakes, packet analysis, and security principles.", "topics": ["Security Principles: CIA Triad (Confidentiality, Integrity, Availability), Defense in Depth", "TCP/IP & OSI 7-Layer Model: Detailed packet structures, 3-way handshake, ARP, DNS, DHCP", "Packet Analysis: Wireshark capture filters, inspecting HTTP/HTTPS, analyzing DNS leaks", "Linux for Hackers: Kali Linux environment, bash scripting, file permissions, cron inspection"], "resources": [{"type": "interactive", "name": "TryHackMe: Pre-Security & Complete Beginner Paths", "url": "https://tryhackme.com/path/outline/presecurity"}, {"type": "video", "name": "NetworkChuck: Wireshark for Beginners Tutorial", "url": "https://www.youtube.com/watch?v=lb1Dw0elw0Q"}, {"type": "book", "name": "Professor Messer: CompTIA Network+ Training Videos (Free)", "url": "https://www.professormesser.com/network-plus/n10-008/n10-008-training-course/"}]}, {"id": "sec-phase-1", "phaseNumber": "Phase 1", "duration": "Months 2\u20134", "title": "Web Application Security & OWASP Top 10", "description": "Identify, exploit, and remediate the most critical web application vulnerabilities.", "topics": ["OWASP Top 10 Breakdown: Broken Access Control, Cryptographic Failures, Injection, Insecure Design", "SQL Injection (SQLi): In-band (UNION based), Error-based, Blind (Boolean/Time based) SQLi", "Cross-Site Scripting (XSS): Stored, Reflected, DOM-based XSS, Content Security Policy (CSP) bypasses", "Server-Side Request Forgery (SSRF) & Cross-Site Request Forgery (CSRF)", "Authentication Flaws: Insecure direct object references (IDOR), session fixation, JWT signature tampering", "Hands-on Tool: Burp Suite Community (Interception proxy, Repeater, Intruder, Decoder)"], "resources": [{"type": "interactive", "name": "PortSwigger Web Security Academy (Free World-Class Labs)", "url": "https://portswigger.net/web-security"}, {"type": "docs", "name": "OWASP Top 10 Official Documentation", "url": "https://owasp.org/www-project-top-ten/"}, {"type": "interactive", "name": "OWASP Juice Shop (Vulnerable Practice App)", "url": "https://owasp.org/www-project-juice-shop/"}]}, {"id": "sec-phase-2", "phaseNumber": "Phase 2", "duration": "Months 5\u20136", "title": "Network Penetration Testing & Reconnaissance", "description": "Port scanning, vulnerability discovery, exploitation frameworks, and privilege escalation.", "topics": ["Reconnaissance: OSINT tools (theHarvester, Shodan, Maltego, WHOIS, DNS enumeration)", "Port Scanning: Nmap flags (-sS, -sV, -sC, -O, timing templates, NSE scripts)", "Exploitation: Metasploit Framework (msfconsole, payloads, meterpreter sessions)", "Password Cracking: John the Ripper, Hashcat, Hydra for online brute forcing, wordlists (RockYou)", "Privilege Escalation: Linux (SUID binaries, sudo privileges, kernel exploits) & Windows basics"], "resources": [{"type": "interactive", "name": "Hack The Box: Starting Point (Free Hands-on Labs)", "url": "https://www.hackthebox.com/"}, {"type": "video", "name": "The Cyber Mentor: Practical Ethical Hacking Free Course", "url": "https://www.youtube.com/watch?v=3Kq1MIfTWCE"}]}, {"id": "sec-phase-3", "phaseNumber": "Phase 3", "duration": "Months 7\u20138", "title": "Applied Cryptography & Secure Architecture", "description": "Symmetric/asymmetric algorithms, hashing, TLS/SSL handshakes, and Public Key Infrastructure.", "topics": ["Symmetric Encryption: AES (CBC vs GCM mode), stream ciphers, key length security", "Asymmetric Encryption: RSA, Elliptic Curve Cryptography (ECC), Diffie-Hellman key exchange", "Cryptographic Hashing: SHA-256, SHA-3, salting, password hashing algorithms (bcrypt, Argon2)", "Digital Signatures & PKI: Certificate Authorities (CAs), X.509 certificates, SSL/TLS handshake", "Common Cryptographic Pitfalls: Hardcoded keys, ECB mode leaks, predictable IVs"], "resources": [{"type": "book", "name": "Crypto101: A Free Introductory Course on Cryptography", "url": "https://www.crypto101.io/"}, {"type": "interactive", "name": "Cryptohack: Fun Interactive Cryptography Puzzles", "url": "https://cryptohack.org/"}]}, {"id": "sec-phase-4", "phaseNumber": "Phase 4", "duration": "Months 9\u201310", "title": "Defensive Security (Blue Team) & SOC Operations", "description": "SIEM log analysis, intrusion detection, incident response, and malware basics.", "topics": ["Security Information & Event Management (SIEM): Splunk fundamentals or Elastic Security / Wazuh", "Intrusion Detection Systems (IDS/IPS): Snort rules, Suricata network inspection", "Host Hardening: Linux CIS benchmarks, disabling unused ports/services, SSH key hardening", "Incident Response: SANS Incident Handling steps (Preparation, Identification, Containment, Eradication, Recovery, Lessons Learned)", "Threat Intelligence: MITRE ATT&CK Framework, Indicators of Compromise (IoCs)"], "resources": [{"type": "interactive", "name": "TryHackMe: SOC Level 1 Learning Path", "url": "https://tryhackme.com/path/outline/soclevel1"}, {"type": "docs", "name": "MITRE ATT&CK Matrix", "url": "https://attack.mitre.org/"}, {"type": "video", "name": "John Hammond: Cyber Security Walkthroughs & CTF Analysis", "url": "https://www.youtube.com/c/JohnHammond010"}]}]}, "frontend": {"id": "frontend", "title": "Modern Frontend Engineering & Next.js 15 \u00b7 8 Months", "category": "Web Development", "tag": "React, Next.js & TypeScript", "description": "Master modern HTML5, responsive CSS layout, TypeScript strict mode, React 19, and production Next.js 15.", "badgeColor": "purple", "phases": [{"id": "fe-phase-0", "phaseNumber": "Phase 0", "duration": "Month 1", "title": "HTML5, Modern CSS & Responsive Layouts", "description": "Accessible semantic structure, CSS architecture, Tailwind CSS, and layout mastery.", "topics": ["Semantic HTML5: article, section, nav, main, aside, dialog, details, form elements", "Web Accessibility (a11y): WCAG guidelines, ARIA attributes, keyboard navigation, contrast ratios", "CSS Grid & Flexbox: Multi-dimensional layout, subgrid, responsive container queries", "Tailwind CSS 4: Utility-first styling, arbitrary variants, responsive design breakpoints", "CSS Animations & Transitions: Transforms, keyframes, hardware acceleration, smooth interactions"], "resources": [{"type": "interactive", "name": "Flexbox Froggy & Grid Garden (Games)", "url": "https://flexboxfroggy.com/"}, {"type": "docs", "name": "Tailwind CSS Official Documentation", "url": "https://tailwindcss.com/docs"}, {"type": "interactive", "name": "web.dev: Learn CSS (Google Free Guide)", "url": "https://web.dev/learn/css/"}]}, {"id": "fe-phase-1", "phaseNumber": "Phase 1", "duration": "Months 2\u20133", "title": "TypeScript Mastery for Web Developers", "description": "Strict type safety, generics, union types, inference, and utility types.", "topics": ["TypeScript Foundations: Primitive types, Type annotations vs Type inference, Interfaces vs Type aliases", "Advanced Types: Union and Intersection types, Literal types, Enums vs Const objects", "Generics: Generic functions, Generic interfaces, Constraints (extends keyof)", "Type Narrowing: typeof, instanceof, Type guards, Discriminated unions", "Utility Types: Partial, Required, Readonly, Pick, Omit, Record, ReturnType", "Configuring tsconfig.json: strict mode, paths aliases, moduleResolution"], "resources": [{"type": "book", "name": "TypeScript Handbook (Official Free Book)", "url": "https://www.typescriptlang.org/docs/handbook/intro.html"}, {"type": "interactive", "name": "Execute Program: TypeScript Interactive Course", "url": "https://www.executeprogram.com/courses/typescript"}]}, {"id": "fe-phase-2", "phaseNumber": "Phase 2", "duration": "Months 4\u20135", "title": "React 19 Core & Modern Patterns", "description": "Component design, custom hooks, Suspense, and state architectures.", "topics": ["React 19 Features: Actions, useActionState, useOptimistic, use() hook", "Hook Architecture: Building robust custom hooks, preventing stale closures", "Form Management: React Hook Form + Zod schema validation", "Client State vs Server State: Zustand for lightweight client state, TanStack Query for remote APIs", "UI Component Libraries: Radix UI primitives, Shadcn/ui architecture, Lucide icons"], "resources": [{"type": "docs", "name": "React 19 Official Documentation", "url": "https://react.dev/"}, {"type": "docs", "name": "Shadcn/ui Components & Patterns", "url": "https://ui.shadcn.com/"}]}, {"id": "fe-phase-3", "phaseNumber": "Phase 3", "duration": "Months 6\u20137", "title": "Next.js 15 Full-Stack App Router", "description": "Server Components, Server Actions, Dynamic rendering, ISR, and metadata SEO.", "topics": ["Next.js App Router: layout.tsx, page.tsx, loading.tsx, error.tsx, not-found.tsx", "React Server Components (RSC): Server vs Client components ('use client' boundaries)", "Data Fetching Strategies: Static Site Generation (SSG), Server-Side Rendering (SSR), Incremental Static Regeneration (ISR)", "Server Actions: Form mutations directly on the server without custom API endpoints", "Authentication: NextAuth.js / Auth.js or Clerk integration", "SEO & Core Web Vitals: Next.js Metadata API, sitemap.xml, robots.txt, OpenGraph image generation"], "resources": [{"type": "interactive", "name": "Next.js Learn: Official Interactive Tutorial", "url": "https://nextjs.org/learn"}, {"type": "video", "name": "Codevolution: Next.js 14/15 Full Tutorial Playlist", "url": "https://www.youtube.com/playlist?list=PLC3y8-rFHvwjOKd6gdf4QtV1uYNiQnruI"}]}, {"id": "fe-phase-4", "phaseNumber": "Phase 4", "duration": "Month 8", "title": "Web Performance, Testing & CI/CD", "description": "Core Web Vitals optimization, unit testing, Playwright E2E tests, and Vercel hosting.", "topics": ["Performance Optimization: Largest Contentful Paint (LCP), Interaction to Next Paint (INP), Cumulative Layout Shift (CLS)", "Asset Optimization: Next/Image, Next/Font, dynamic imports, bundle size analysis with @next/bundle-analyzer", "Unit & Integration Testing: Vitest and React Testing Library", "End-to-End (E2E) Testing: Playwright for automated cross-browser testing", "Deployment & Monitoring: Vercel deployment, edge functions, Sentry error monitoring"], "resources": [{"type": "docs", "name": "web.dev: Core Web Vitals Guide", "url": "https://web.dev/vitals/"}, {"type": "docs", "name": "Playwright Official Getting Started Guide", "url": "https://playwright.dev/docs/intro"}]}]}, "pythonai": {"id": "pythonai", "title": "Python, Data Engineering & Generative AI \u00b7 9 Months", "category": "AI & Data Science", "tag": "Python, Machine Learning & LLMs", "description": "From Pythonic data analysis to PyTorch neural networks, Vector databases, and production RAG with LLMs.", "badgeColor": "teal", "phases": [{"id": "py-phase-0", "phaseNumber": "Phase 0", "duration": "Month 1", "title": "Advanced Python & Software Engineering", "description": "Write clean, modular, Pythonic code with type annotations, virtual environments, and OOP.", "topics": ["Python Fundamentals: List/Dict/Set comprehensions, Generators and yield, Decorators, Context managers", "Object-Oriented Python: Dunder methods (__init__, __repr__, __getitem__), Dataclasses, Pydantic v2", "Type Hints: typing module (Union, Optional, Callable, TypeVar), static type checking with mypy", "Packaging & Environment: virtualenv, Poetry, UV package manager, writing clean modular packages", "Asynchronous Python: asyncio, coroutines, async/await for fast web scrapers and API consumers"], "resources": [{"type": "book", "name": "Automate the Boring Stuff with Python (Free Online)", "url": "https://automatetheboringstuff.com/"}, {"type": "video", "name": "freeCodeCamp: Python for Beginners Full Course", "url": "https://www.youtube.com/watch?v=rfscVS0vtbw"}, {"type": "docs", "name": "Pydantic v2 Documentation", "url": "https://docs.pydantic.dev/latest/"}]}, {"id": "py-phase-1", "phaseNumber": "Phase 1", "duration": "Months 2\u20133", "title": "Data Analysis & Scientific Computing", "description": "Manipulate structured data, run statistical operations, and produce informative visualizations.", "topics": ["NumPy: Multi-dimensional arrays, vectorization, broadcasting, linear algebra operations", "Pandas: DataFrames, Series, reading CSV/Excel/Parquet, handling missing values, filtering", "Data Wrangling: GroupBy, Pivot tables, Merging/Joining datasets, time-series analysis", "Data Visualization: Matplotlib for low-level plotting, Seaborn for statistical distributions", "Jupyter Notebooks: Interactive exploratory data analysis (EDA) and reproducible workflows"], "resources": [{"type": "book", "name": "Python for Data Analysis (3rd Edition Free Online)", "url": "https://wesmckinney.com/book/"}, {"type": "interactive", "name": "Kaggle: Learn Python & Pandas Free Micro-Courses", "url": "https://www.kaggle.com/learn"}]}, {"id": "py-phase-2", "phaseNumber": "Phase 2", "duration": "Months 4\u20135", "title": "Machine Learning Fundamentals", "description": "Supervised and unsupervised ML models using Scikit-Learn with rigorous evaluation.", "topics": ["ML Concepts: Supervised vs Unsupervised learning, Bias-Variance tradeoff, Overfitting vs Underfitting", "Regression Models: Linear Regression, Ridge, Lasso, Polynomial regression, evaluation metrics (MSE, R2)", "Classification Models: Logistic Regression, Decision Trees, Random Forests, XGBoost, LightGBM", "Model Evaluation: Confusion matrix, Precision, Recall, F1-Score, ROC-AUC curve, K-Fold Cross Validation", "Feature Engineering: Standardization, Normalization, One-Hot Encoding, Handling imbalanced data (SMOTE)"], "resources": [{"type": "interactive", "name": "fast.ai: Practical Deep Learning for Coders", "url": "https://course.fast.ai/"}, {"type": "docs", "name": "Scikit-Learn Official User Guide", "url": "https://scikit-learn.org/stable/user_guide.html"}, {"type": "video", "name": "StatQuest with Josh Starmer: Machine Learning Playlist", "url": "https://www.youtube.com/playlist?list=PLblh5JKOoLUICTaGLRoHQDuF_7q2GfuJF"}]}, {"id": "py-phase-3", "phaseNumber": "Phase 3", "duration": "Months 6\u20137", "title": "Deep Learning with PyTorch", "description": "Build and train neural networks, CNNs, and understand Transformer foundations.", "topics": ["PyTorch Tensors: Autograd (automatic differentiation), GPU acceleration with CUDA", "Building Neural Networks: nn.Module, linear layers, activation functions (ReLU, GELU, Sigmoid), loss functions, optimizers (AdamW)", "Training Loop: Forward pass, loss calculation, backward pass, optimizer step, validation loops", "Computer Vision Basics: Convolutional Neural Networks (CNNs), transfer learning with torchvision models", "Natural Language Processing (NLP): Tokenization, embeddings, Recurrent nets vs Transformers self-attention mechanism"], "resources": [{"type": "book", "name": "Dive into Deep Learning (Interactive Free Textbook)", "url": "https://d2l.ai/"}, {"type": "video", "name": "Andrej Karpathy: Neural Networks: Zero to Hero (YouTube Series)", "url": "https://www.youtube.com/playlist?list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ"}, {"type": "docs", "name": "PyTorch Official Tutorials", "url": "https://pytorch.org/tutorials/"}]}, {"id": "py-phase-4", "phaseNumber": "Phase 4", "duration": "Months 8\u20139", "title": "Generative AI, Large Language Models (LLMs) & RAG", "description": "Build production GenAI applications using LangChain, Vector Databases, and Retrieval-Augmented Generation.", "topics": ["LLM Foundations: Prompt engineering, system instructions, temperature, top-p, context windows", "API Integrations: OpenAI API, Google Gemini API, Anthropic Claude SDK with Python", "Vector Embeddings: text-embedding-3-small, sentence-transformers, cosine similarity", "Vector Databases: ChromaDB, Pinecone, Qdrant, Milvus for similarity search", "Retrieval-Augmented Generation (RAG): Document chunking, hybrid search, re-ranking, source attribution", "LLM Orchestration: LangChain / LlamaIndex for building agents with tool calling and memory", "Evaluation & Guardrails: RAG Triad (Context Relevance, Groundedness, Answer Relevance), NeMo Guardrails"], "resources": [{"type": "docs", "name": "LangChain Official Python Documentation", "url": "https://python.langchain.com/docs/get_started/introduction"}, {"type": "interactive", "name": "DeepLearning.AI: Free Short Courses by Andrew Ng", "url": "https://www.deeplearning.ai/short-courses/"}, {"type": "docs", "name": "Hugging Face NLP Course (Free)", "url": "https://huggingface.co/learn/nlp-course/chapter1/1"}]}]}};
+
+    const STORAGE_KEY = "dev_roadmaps_user_progress_v1";
+
+    let activeRoadmapId = "springboot";
+    let activeCategory = "All";
+    let allExpanded = false;
+    let userProgress = {};
+
+    // Load progress from localStorage
+    function loadProgress() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          userProgress = JSON.parse(saved);
+        }
+      } catch (e) {
+        console.error("Could not load from localStorage:", e);
+      }
+    }
+
+    // Save progress to localStorage
+    function saveProgress() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(userProgress));
+      } catch (e) {
+        console.error("Could not save to localStorage:", e);
+      }
+    }
+
+    // Switch active roadmap
+    function switchRoadmap(id) {
+      activeRoadmapId = id;
+      renderTabs();
+      renderActiveRoadmap();
+      window.scrollTo({ top: document.querySelector('.roadmap-panel').offsetTop - 90, behavior: 'smooth' });
+    }
+
+    // Filter by Category
+    function filterCategory(cat, btn) {
+      activeCategory = cat;
+      document.querySelectorAll('.cat-chip').forEach(el => el.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      
+      const keys = Object.keys(ROADMAPS_DATA);
+      const matches = keys.filter(k => cat === 'All' || ROADMAPS_DATA[k].category === cat);
+      if (matches.length > 0 && !matches.includes(activeRoadmapId)) {
+        activeRoadmapId = matches[0];
+      }
+      renderTabs();
+      renderActiveRoadmap();
+    }
+
+    // Render Navigation Tabs
+    function renderTabs() {
+      const nav = document.getElementById("roadmapsNavList");
+      nav.innerHTML = "";
+
+      Object.values(ROADMAPS_DATA).forEach(roadmap => {
+        if (activeCategory !== 'All' && roadmap.category !== activeCategory) return;
+
+        const btn = document.createElement("button");
+        btn.className = `roadmap-tab-btn ${roadmap.id === activeRoadmapId ? 'active' : ''}`;
+        btn.onclick = () => switchRoadmap(roadmap.id);
+
+        let total = 0;
+        let checked = 0;
+        roadmap.phases.forEach(p => {
+          p.topics.forEach((t, idx) => {
+            total++;
+            const itemKey = `${roadmap.id}_${p.id}_${idx}`;
+            if (userProgress[itemKey]) checked++;
+          });
+        });
+        const pct = total > 0 ? Math.round((checked / total) * 100) : 0;
+
+        btn.innerHTML = `
+          <div class="tab-indicator"></div>
+          <span>${roadmap.title.split(' · ')[0]}</span>
+          <span style="font-size: 0.72rem; opacity: 0.7; margin-left: 0.2rem;">${pct}%</span>
+        `;
+        nav.appendChild(btn);
+      });
+    }
+
+    // Render Active Roadmap Content
+    function renderActiveRoadmap() {
+      const roadmap = ROADMAPS_DATA[activeRoadmapId];
+      if (!roadmap) return;
+
+      document.getElementById("activeRoadmapTitle").textContent = roadmap.title;
+      document.getElementById("activeRoadmapDesc").textContent = roadmap.description;
+      document.getElementById("activeCategoryTag").textContent = roadmap.category;
+      document.getElementById("activeTechTag").textContent = roadmap.tag || "Full Path";
+      document.getElementById("phasesCountText").textContent = `${roadmap.phases.length} Phases`;
+
+      renderPhases();
+      updateRoadmapProgress();
+    }
+
+    // Render Phases and Topic Checklists
+    function renderPhases() {
+      const roadmap = ROADMAPS_DATA[activeRoadmapId];
+      const container = document.getElementById("phaseListContainer");
+      container.innerHTML = "";
+
+      roadmap.phases.forEach((phase, phaseIndex) => {
+        const phaseCard = document.createElement("div");
+        phaseCard.className = `phase-card ${allExpanded || phaseIndex === 0 ? 'open' : ''}`;
+        phaseCard.id = `phase_card_${phase.id}`;
+
+        let phaseTotal = phase.topics.length;
+        let phaseChecked = 0;
+        phase.topics.forEach((_, tIdx) => {
+          const itemKey = `${roadmap.id}_${phase.id}_${tIdx}`;
+          if (userProgress[itemKey]) phaseChecked++;
+        });
+
+        if (phaseChecked === phaseTotal && phaseTotal > 0) {
+          phaseCard.classList.add("all-completed");
+        }
+
+        // Card Header
+        const header = document.createElement("div");
+        header.className = "phase-card-header";
+        header.onclick = () => togglePhase(phaseCard);
+
+        header.innerHTML = `
+          <div class="phase-header-left">
+            <span class="phase-month-badge">${phase.duration}</span>
+            <span class="phase-title-text">${phase.phaseNumber} · ${phase.title}</span>
+          </div>
+          <div class="phase-header-right">
+            <span class="phase-counter-badge" id="counter_${phase.id}">${phaseChecked}/${phaseTotal}</span>
+            <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+        `;
+
+        // Card Body
+        const body = document.createElement("div");
+        body.className = "phase-card-body";
+
+        // Sub description
+        const subdesc = document.createElement("p");
+        subdesc.className = "phase-subdesc";
+        subdesc.textContent = phase.description;
+        body.appendChild(subdesc);
+
+        // Topics Checklist
+        const topicsList = document.createElement("div");
+        topicsList.className = "topics-checklist";
+
+        phase.topics.forEach((topicText, topicIndex) => {
+          const itemKey = `${roadmap.id}_${phase.id}_${topicIndex}`;
+          const isChecked = !!userProgress[itemKey];
+
+          const topicItem = document.createElement("div");
+          topicItem.className = `topic-item ${isChecked ? 'checked' : ''}`;
+          topicItem.setAttribute("data-topic-key", itemKey);
+          topicItem.onclick = (e) => toggleTopic(itemKey, topicItem, phase, roadmap);
+
+          topicItem.innerHTML = `
+            <div class="custom-checkbox">
+              <svg class="check-svg" viewBox="0 0 24 24">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <div class="topic-text">${topicText}</div>
+          `;
+          topicsList.appendChild(topicItem);
+        });
+        body.appendChild(topicsList);
+
+        // Free Resources Block
+        if (phase.resources && phase.resources.length > 0) {
+          const resBlock = document.createElement("div");
+          resBlock.className = "resources-block";
+
+          let resHtml = `
+            <div class="resources-heading">
+              <span>Free Curated Resources</span>
+              <span style="font-size: 0.7rem; color: var(--accent-gold);">Verified Free</span>
+            </div>
+            <div class="resource-links-wrap">
+          `;
+
+          phase.resources.forEach(r => {
+            let icon = "📄";
+            let typeClass = "docs";
+            if (r.type === "video") {
+              icon = "📺 YouTube:";
+              typeClass = "video";
+            } else if (r.type === "book") {
+              icon = "📖 Free Book:";
+              typeClass = "book";
+            } else if (r.type === "interactive") {
+              icon = "💻 Interactive:";
+              typeClass = "interactive";
+            }
+
+            resHtml += `
+              <a href="${r.url}" target="_blank" rel="noopener noreferrer" class="res-link ${typeClass}" title="Open free learning resource in new tab">
+                <span class="res-icon">${icon}</span>
+                <span>${r.name}</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.7;">
+                  <line x1="7" y1="17" x2="17" y2="7"></line>
+                  <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
+              </a>
+            `;
+          });
+
+          resHtml += `</div>`;
+          resBlock.innerHTML = resHtml;
+          body.appendChild(resBlock);
+        }
+
+        phaseCard.appendChild(header);
+        phaseCard.appendChild(body);
+        container.appendChild(phaseCard);
+      });
+    }
+
+    // Toggle single phase accordion
+    function togglePhase(card) {
+      card.classList.toggle("open");
+    }
+
+    // Toggle Expand All / Collapse All
+    function toggleExpandAll() {
+      allExpanded = !allExpanded;
+      document.querySelectorAll(".phase-card").forEach(c => {
+        if (allExpanded) c.classList.add("open");
+        else c.classList.remove("open");
+      });
+      document.getElementById("expandAllBtnText").textContent = allExpanded ? "Collapse All" : "Expand All";
+    }
+
+    // Toggle individual topic checkbox
+    function toggleTopic(itemKey, topicElement, phase, roadmap) {
+      if (userProgress[itemKey]) {
+        delete userProgress[itemKey];
+        topicElement.classList.remove("checked");
+      } else {
+        userProgress[itemKey] = true;
+        topicElement.classList.add("checked");
+      }
+      saveProgress();
+
+      // Update Phase Counter
+      let phaseTotal = phase.topics.length;
+      let phaseChecked = 0;
+      phase.topics.forEach((_, tIdx) => {
+        const key = `${roadmap.id}_${phase.id}_${tIdx}`;
+        if (userProgress[key]) phaseChecked++;
+      });
+
+      const counterBadge = document.getElementById(`counter_${phase.id}`);
+      if (counterBadge) {
+        counterBadge.textContent = `${phaseChecked}/${phaseTotal}`;
+      }
+
+      const phaseCard = document.getElementById(`phase_card_${phase.id}`);
+      if (phaseCard) {
+        if (phaseChecked === phaseTotal && phaseTotal > 0) {
+          phaseCard.classList.add("all-completed");
+        } else {
+          phaseCard.classList.remove("all-completed");
+        }
+      }
+
+      updateRoadmapProgress();
+      renderTabs();
+    }
+
+    // Update Overall Roadmap Progress Bar
+    function updateRoadmapProgress() {
+      const roadmap = ROADMAPS_DATA[activeRoadmapId];
+      if (!roadmap) return;
+
+      let total = 0;
+      let done = 0;
+
+      roadmap.phases.forEach(p => {
+        p.topics.forEach((_, idx) => {
+          total++;
+          const itemKey = `${roadmap.id}_${p.id}_${idx}`;
+          if (userProgress[itemKey]) done++;
+        });
+      });
+
+      const percent = total > 0 ? Math.round((done / total) * 100) : 0;
+
+      document.getElementById("progressDoneText").textContent = `${done} / ${total} done`;
+      document.getElementById("progressPercentBadge").textContent = `${percent}%`;
+      document.getElementById("progressBarFill").style.width = `${percent}%`;
+      
+      const remaining = total - done;
+      document.getElementById("progressRemainingText").textContent = 
+        remaining === 0 ? "🎉 Congratulations! You have completed all topics in this roadmap!" : `${remaining} topics remaining`;
+    }
+
+    // Reset All Progress for Active Roadmap
+    function resetActiveRoadmap() {
+      const roadmap = ROADMAPS_DATA[activeRoadmapId];
+      if (!confirm(`Are you sure you want to reset all your progress for "${roadmap.title}"?`)) {
+        return;
+      }
+
+      roadmap.phases.forEach(p => {
+        p.topics.forEach((_, idx) => {
+          const itemKey = `${roadmap.id}_${p.id}_${idx}`;
+          delete userProgress[itemKey];
+        });
+      });
+
+      saveProgress();
+      renderPhases();
+      updateRoadmapProgress();
+      renderTabs();
+    }
+
+    // Initial load
+    window.addEventListener("DOMContentLoaded", () => {
+      loadProgress();
+      renderTabs();
+      renderActiveRoadmap();
+    });
+  </script>
+</body>
+</html>
