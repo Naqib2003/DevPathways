@@ -2,7 +2,7 @@ DevPathways · Interactive Developer Roadmaps & Free Curated Resources
 
 Built by Quazi Naqibul Alam
 
-Live demo link : 
+Live demo link : https://dev-pathways-fq2vdz08c-naqib3.vercel.app/
 
 🌟 Overview
 
